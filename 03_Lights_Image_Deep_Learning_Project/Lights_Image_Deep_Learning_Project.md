@@ -1,4 +1,4 @@
-![image](https://github.com/songseogyeong/project-deep_learning/assets/155418141/95d659e7-9b20-478f-b605-e7ac172d7618)# 🚦 Carla Traffic Lights Images <br> 🚦 신호등 이미지 분류
+# 🚦 Carla Traffic Lights Images <br> 🚦 신호등 이미지 분류
 
 ## 🚦 목차
 1. 개요
