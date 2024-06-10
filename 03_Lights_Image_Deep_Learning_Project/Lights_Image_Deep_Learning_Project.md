@@ -1,4 +1,4 @@
-# 🚦 Carla Traffic Lights Images <br> 🚦 신호등 이미지 분류
+![image](https://github.com/songseogyeong/project-deep_learning/assets/155418141/95d659e7-9b20-478f-b605-e7ac172d7618)# 🚦 Carla Traffic Lights Images <br> 🚦 신호등 이미지 분류
 
 ## 🚦 목차
 1. 개요
@@ -207,6 +207,11 @@
 | 3  | vgg16  | 0.9570 | 0.9687   |
 | 4  | xception  | 0.9756 | 1.0000   |
 | 5  | 미세조정  | 0.9966 | 0.9974   |
+
+<br>
+
+미세조정 전: 3240s  
+미세 조정 후: 590s
 
 <br>
 
