@@ -61,21 +61,25 @@
 <br>
 
 ○ vgg16
+
 <img src='./images/Similarity_vgg.png' width='800px'>
 
 <br>
 
 ○ resnet50
+
 <img src='./images/Similarity_resnet50.png' width='800px'>
 
 <br>
 
 ○ xception
+
 <img src='./images/Similarity_xception.png' width='800px'>
 
 <br>
 
 ○ mobilenet
+
 <img src='./images/Similarity_mobilenet.png' width='800px'>
 
 <br></br>
