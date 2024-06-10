@@ -11,7 +11,7 @@
 ## 1. 개요
 ○ 타겟 개수: 3개
 ```
-0: 'back', 1: 'green', 2: 'red', 3: 'yellow'
+0: 'brokenbear', 1: 'Bellygom', 2: 'jokebear'
 ```
 
 ○ 데이터 세트 개수
