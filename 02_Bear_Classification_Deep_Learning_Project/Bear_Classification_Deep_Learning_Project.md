@@ -201,6 +201,11 @@
 
 <br>
 
+미세 조정 전 시간: 1,292s
+미세 조정 후 시간: 458s
+
+<br>
+
 <table style="margin: 0 auto; text-align: center;">
   <tr>
     <td style="text-align: center;">mobilenet</td>
@@ -227,6 +232,5 @@
 <br></br>
 
 ## 4. 예측 결과
-- 성능이 가장 우세한 미세조정된 모델 사용
 
 <img src='./images/result.png' width='800px'>
