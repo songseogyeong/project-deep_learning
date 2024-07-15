@@ -54,27 +54,81 @@ https://www.kaggle.com/datasets/misrakahmed/vegetable-image-dataset
 
 ✔ 총 데이터 개수: 16800장 데이터
 
-| Bean   | Brinjal | Broccoli |
-|:------:|:-------:|:--------:|
-| <img src='./images/01_개요/Bean51.png' width='100'>  | <img src='./images/01_개요/Brinjal210.png' width='100'>    | <img src='./images/01_개요/Broccoli133.png' width='100'>     |
-| Cabbage   | Capsicum | Carrot |
-|:------:|:-------:|:--------:|
-| <img src='./images/01_개요/Cabbage124.png' width='100'>  | <img src='./images/01_개요/Capsicum77.png' width='100'>    | <img src='./images/01_개요/Carrot514.png' width='100'>     |
-| Cauliflower   | Cucumber | Potato |
-|:------:|:-------:|:--------:|
-| <img src='./images/01_개요/Cauliflower11.png' width='100'>  | <img src='./images/01_개요/Cucumber163.png' width='100'>    | <img src='./images/01_개요/Potato276.png' width='100'>     |
-| Pumpkin   | Radish | Tomato |
-|:------:|:-------:|:--------:|
-| <img src='./images/01_개요/Pumpkin85.png' width='100'>  | <img src='./images/01_개요/Radish236.png' width='100'>    | <img src='./images/01_개요/Tomato29.png' width='100'>     |
+<br>
+
+✔ 훈련 데이터 세트
+| 연번 | target_names | count  |
+|:---:|:------------:|:------:|
+| 1  | Bean         | 1000   |
+| 2  | Brinjal      | 1000   |
+| 3  | Broccoli     | 1000 |
+| 4 | Cabbage      | 1000 |
+| 5 | Capsicum     | 1000 |
+| 6 | Carrot       | 1000 |
+| 7 | Cauliflower  | 1000 |
+| 8 | Cucumber     | 1000 |
+| 9 | Potato       | 1000 |
+| 10 | Pumpkin      | 1000 |
+| 11 | Radish       | 1000 |
+| 12 | Tomato       | 1000 |
+
+<br>
+
+✔ 검증 데이터 세트
+| 연번 | target_names | count  |
+|:---:|:------------:|:------:|
+| 1  | Bean         | 200    |
+| 2  | Brinjal      | 200    |
+| 3  | Broccoli     | 200    |
+| 4 | Cabbage      | 200    |
+| 5 | Capsicum     | 200    |
+| 6 | Carrot       | 200    |
+| 7 | Cauliflower  | 200    |
+| 8 | Cucumber     | 200    |
+| 9 | Potato       | 200    |
+| 10 | Pumpkin      | 200    |
+| 11 | Radish       | 200    |
+| 12 | Tomato       | 200    |
+
+<br>
+
+✔ 테스트 데이터 세트
+| 연번 | target_names | count  |
+|:---:|:------------:|:------:|
+| 1  | Bean         | 200    |
+| 2  | Brinjal      | 200    |
+| 3  | Broccoli     | 200    |
+| 4 | Cabbage      | 200    |
+| 5 | Capsicum     | 200    |
+| 6 | Carrot       | 200    |
+| 7 | Cauliflower  | 200    |
+| 8 | Cucumber     | 200    |
+| 9 | Potato       | 200    |
+| 10 | Pumpkin      | 200    |
+| 11 | Radish       | 200    |
+| 12 | Tomato       | 200    |
+
 
 
 <br>
 
 ✔ 이미지
 
-| 컬럼명                          | 컬럼 설명              |
-|:----------------------------:|:------------------:|
-| KWH  | 전력 소비량  |
+| Bean   | Brinjal | Broccoli |
+|:------:|:-------:|:--------:|
+| <img src='./images/01_개요/Bean51.png' width='100'>  | <img src='./images/01_개요/Brinjal210.png' width='100'>    | <img src='./images/01_개요/Broccoli133.png' width='100'>     |
+
+| Cabbage   | Capsicum | Carrot |
+|:------:|:-------:|:--------:|
+| <img src='./images/01_개요/Cabbage124.png' width='100'>  | <img src='./images/01_개요/Capsicum77.png' width='100'>    | <img src='./images/01_개요/Carrot514.png' width='100'>     |
+
+| Cauliflower   | Cucumber | Potato |
+|:------:|:-------:|:--------:|
+| <img src='./images/01_개요/Cauliflower11.png' width='100'>  | <img src='./images/01_개요/Cucumber163.png' width='100'>    | <img src='./images/01_개요/Potato276.png' width='100'>     |
+
+| Pumpkin   | Radish | Tomato |
+|:------:|:-------:|:--------:|
+| <img src='./images/01_개요/Pumpkin85.png' width='100'>  | <img src='./images/01_개요/Radish236.png' width='100'>    | <img src='./images/01_개요/Tomato29.png' width='100'>     |
 
 <br></br>
 <br></br>
@@ -84,1051 +138,547 @@ https://www.kaggle.com/datasets/misrakahmed/vegetable-image-dataset
 
 # Ⅱ. 데이터 탐색 및 전처리
 
-## 1. 데이터 탐색
-### ○ head
-
-<img src='./images/head.png' width='800'>
+## 1. 데이터 전처리
+### ○ 이미지 파일명 변경
 <details>
-  <summary>code</summary>
+  <summary>이미지 경로 code</summary>
 
   ```
-  # 상위 5개 데이터 확인
-  r_df.head()
+  from glob import glob
+  import os
+
+  # 경로 지정
+  train_dir = './datasets/train/'
+  validation_dir = './datasets/validation/'
+  test_dir = './datasets/test/'
+
+  # 해당 경로를 통해 이미지 폴더를 찾아옴
+  directories = glob(os.path.join(train_dir, '*'))
+  ```
+</details>
+<details>
+  <summary>디렉토리 이름 저장 code</summary>
+
+  ```
+  # 폴더 이름 저장할 초기 list 생성
+  directory_names = []
+
+  for directory in directories:
+      # 디렉토리의 이름을 찾아와서 list에 저장
+      directory_names.append(directory[directory.rindex('\\') + 1:])
+
+  print(directory_names)
+  ```
+</details>
+<details>
+  <summary>파일명 변경 code</summary>
+
+  ```
+  # 이미지 별 폴더 안 이미지들의 파일명 변경
+  for name in directory_names:
+      for i, file_name in enumerate(os.listdir(os.path.join(train_dir, name))):
+          # 이전 파일의 전체 경로
+          old_file = os.path.join(train_dir + name + '/', file_name)
+          # 신규 파일 전체 경로 작성
+          new_file = os.path.join(train_dir + name + '/', name + str(i + 1) + '.png')
+
+          # 이전 파일의 이름을 신규 파일로 변경
+          os.rename(old_file, new_file)
+
+  for name in directory_names:
+      for i, file_name in enumerate(os.listdir(os.path.join(validation_dir, name))):
+          # 이전 파일의 전체 경로
+          old_file = os.path.join(validation_dir + name + '/', file_name)
+          # 신규 파일 전체 경로 작성
+          new_file = os.path.join(validation_dir + name + '/', name + str(i + 1) + '.png')
+
+          # 이전 파일의 이름을 신규 파일로 변경
+          os.rename(old_file, new_file)
+
+  for name in directory_names:
+      for i, file_name in enumerate(os.listdir(os.path.join(test_dir, name))):
+          # 이전 파일의 전체 경로
+          old_file = os.path.join(test_dir + name + '/', file_name)
+          # 신규 파일 전체 경로 작성
+          new_file = os.path.join(test_dir + name + '/', name + str(i + 1) + '.png')
+
+          # 이전 파일의 이름을 신규 파일로 변경
+          os.rename(old_file, new_file)
   ```
 </details>
 
 <br></br>
 
-### ○ tail
-
-<img src='./images/tail.png' width='800'>
+### ○ 데이터 프레임 변환
 <details>
-  <summary>code</summary>
+  <summary>이미지 전처리 code</summary>
 
   ```
-  # 하위 5개 데이터 확인
-  r_df.tail()
-  ```
-</details>
+  from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
-<br></br>
+  # 이미지 사이즈 및 배치 사이즈
+  IMAGE_SIZE = 244
+  BATCH_SIZE = 244
 
-### ○ 분석
-✔ 상/하위 다섯개 데이터를 확인한 결과 인덱스 외 고유의 ID 확인
+  # 이미지 전처리 객체 선언
+  idg = ImageDataGenerator()
 
-✔ object 형식의 데이터 확인
+  # 경로를 통해 이미지 불러온 후 이미지 전처리 진행
+  train_generator = idg.flow_from_directory(train_dir,
+                                            target_size=(IMAGE_SIZE, IMAGE_SIZE),
+                                            batch_size=BATCH_SIZE,
+                                            class_mode='categorical',
+                                            shuffle=True)
 
-✔ 결측치 확인
+  # 경로를 통해 이미지 불러온 후 이미지 전처리 진행
+  validation_generator = idg.flow_from_directory(validation_dir,
+                                                target_size=(IMAGE_SIZE, IMAGE_SIZE),
+                                                batch_size=BATCH_SIZE,
+                                                class_mode='categorical')
 
+  # 경로를 통해 이미지 불러온 후 이미지 전처리 진행
+  test_generator = idg.flow_from_directory(test_dir,
+                                          target_size=(IMAGE_SIZE, IMAGE_SIZE),
+                                          batch_size=BATCH_SIZE,
+                                          class_mode='categorical')
 
-<br></br>
-<br></br>
-
-## 2. 전처리
-### ○ 결측치
-✔ 2382개 결측치 제거
-
-<details>
-  <summary>결측치 확인 code</summary>
-
-  ```
-  # 결측치 확인
-  pre_r_df.isna().sum().sum()
-  ```
-</details>
-<details>
-  <summary>결측치 제거 code</summary>
-
-  ```
-  # 결측치 제거
-  pre_r_df = pre_r_df[~pre_r_df.isna().any(axis=1)].reset_index(drop=True)
-  ```
-</details>
-
-<br></br>
-
-### ○ null 데이터
-✔ null 값은 존재하지 않는 것으로 확인
-
-<details>
-  <summary>code</summary>
-
-  ```
-  # null 값 확인
-  pre_r_df.isnull().sum().sum()
-  ```
-</details>
-
-<br></br>
-
-### ○ 중복행
-✔ 중복행은 존재하지 않는 것으로 확인
-
-<details>
-  <summary>code</summary>
-
-  ```
-  # 중복행 확인
-  pre_r_df.duplicated().sum()
-  ```
-</details>
-
-<br></br>
-
-### ○ 컬럼 제거
-✔ 불필요한 ID 컬럼 제거 (DOEID)
-
-<details>
-  <summary>code</summary>
-
-  ```
-  # 불필요한 컬럼 제거
-  pre_r_df = pre_r_df.drop(labels='DOEID', axis=1)
-  ```
-</details>
-
-<br></br>
-
-### ○ LabelEncoder
-✔ 데이터 정보 확인 결과 object 형식의 4개 열이 확인됨  
-✔ LabelEncoder를 통해 정수로 변환함
-
-<details>
-  <summary>oject 확인 code</summary>
-
-  ```
-  # 오브젝트 형태를 띄는 열 찾기
-  object_columns = pre_r_df.select_dtypes(include=['object']).columns
-  object_columns
+  # 각 클랙스의 이름과 인덱스 출력
+  print(train_generator.class_indices)
+  print(validation_generator.class_indices)
+  print(test_generator.class_indices)
   ```
 </details>
 <details>
-  <summary>컬럼 고유 값 확인 code</summary>
+  <summary>타겟 고유값 저장 code</summary>
 
   ```
-  # object 컬럼의 고유 값 확인
-  columns = ['METROMICRO', 'UATYP10', 'CLIMATE_REGION_PUB', 'IECC_CLIMATE_PUB']
-
-  for column in columns:
-      print(pre_r_df[column].unique())
+  # 각 타겟의 타겟 이름을 담기 위해 key와 value의 순서 변경하여 타겟의 고유값을 저장
+  target_name = {v: k for k, v in train_generator.class_indices.items()}
+  target_name
   ```
 </details>
 <details>
-  <summary>LabelEncoder code</summary>
+  <summary>타겟 이름 저장 code</summary>
 
   ```
-  from sklearn.preprocessing import LabelEncoder
+  # 각 타겟의 이름 담을 초기 list 선언
+  tarin_target_names = []
+  validation_target_names = []
+  test_target_names = []
 
-  # 데이터 프레임 복제
-  enc_r_df = pre_r_df.copy()
-  encoders = {}
+  # 각 타겟의 인덱스를 확인하여 인덱스에 맞는 타겟 이름을 담아주기
+  for target in train_generator.classes:
+      tarin_target_names.append(target_name[target])
 
-  # 문자열 컬럼 추출
-  columns = columns = ['METROMICRO', 'UATYP10', 'CLIMATE_REGION_PUB', 'IECC_CLIMATE_PUB']
+  for target in validation_generator.classes:
+      validation_target_names.append(target_name[target])
 
-  # 반복하여 컬럼 인코딩 처리:
-  for column in columns:
-      # 레이블인코더 객체 생성
-      encoder = LabelEncoder()
-      # 문자열 데이터 정수로 형변환
-      result = encoder.fit_transform(enc_r_df[column])
-      # 형변환 값으로 대체
-      enc_r_df[column] = result
-      # 원본 데이터 담기
-      encoders[column] = encoder.classes_
+  for target in test_generator.classes:
+      test_target_names.append(target_name[target])
 
-  encoders
+  # 각 타겟의 개수 확인
+  print(tarin_target_names.__len__(), validation_target_names.__len__(), test_target_names.__len__())
   ```
 </details>
-
-<br></br>
-<br></br>
-<br></br>
-<br></br>
-<br></br>
-
-# Ⅲ 머신러닝
-## 1. 평가 지표
-<table>
-  <tr>
-      <td>연번</td>
-      <td> 평가지표</td>
-      <td>산출 코드</td>
-  </tr>
-  <tr>
-      <td>1</td>
-      <td>MSE</td>
-      <td>mean_squared_error(y_test, prediction)</td>
-  </tr>
-  <tr>
-      <td>2</td>
-      <td>RMSE</td>
-      <td>np.sqrt(MSE)</td>
-  </tr>
-  <tr>
-      <td>3</td>
-      <td>R2</td>
-      <td>r2_score(y_test, prediction)</td>
-  </tr>
-</table>
-
 <details>
-  <summary>code</summary>
+  <summary>데이터 프레임 생성code</summary>
 
   ```
-  import numpy as np
-  from sklearn.metrics import mean_squared_log_error, mean_squared_error, r2_score
+  import pandas as pd
 
-  def get_evaluation(y_test, prediction):
-      MSE = mean_squared_error(y_test, prediction)
-      RMSE = np.sqrt(MSE)
-      R2 = r2_score(y_test, prediction)
-      print('MSE: {:.4f}, RMSE: {:.4f}, R2: {:.4f}'\
-          .format(MSE, RMSE, R2))
+  # 파일 경로와 타겟값을 가지고 새로운 데이터 프레임 생성 후
+  # 경로 중 \\(역슬래시)로 되어 있는 부분을 /(슬래시)로 변경
+  train_df = pd.DataFrame({'file_paths': train_generator.filepaths, 'target_names': tarin_target_names, 'targets': train_generator.classes})
+  train_df.file_paths = train_df.file_paths.apply(lambda x: x.replace('\\', '/'))
+
+  validation_df = pd.DataFrame({'file_paths': validation_generator.filepaths, 'target_names': validation_target_names, 'targets': validation_generator.classes})
+  validation_df.file_paths = validation_df.file_paths.apply(lambda x: x.replace('\\', '/'))
+
+  test_df = pd.DataFrame({'file_paths': test_generator.filepaths, 'target_names': test_target_names, 'targets': test_generator.classes})
+  test_df.file_paths = test_df.file_paths.apply(lambda x: x.replace('\\', '/'))
+
+  display(train_df)
+  display(validation_df)
+  display(test_df)
   ```
 </details>
 
 <br></br>
 <br></br>
 
-## 2. 1Cycle
-### ○ 훈련
+## 2. 데이터 탐색
+### ○ 타겟 비중
 
-<img src='./images/1cycle.png' width='200'>
-
+<img src='./images/타겟비중.png' width='800'>
 <details>
-  <summary>code</summary>
+  <summary>value counts code</summary>
 
   ```
-  import numpy as np
-  from sklearn.linear_model import LinearRegression
-  from sklearn.model_selection import train_test_split
-
-  # 데이터 세트 분리
-  # 피처, 타겟 데이터 분리
-  features, targets = enc_r_df.iloc[:, :-1], enc_r_df.iloc[:, -1]
-
-  # 학습/테스트 및 문제/정답 데이터 세트 분리
-  X_train, X_test, y_train, y_test = \
-  train_test_split(features, targets, test_size=0.2, random_state=124)
-
-  # 선형 회귀 모델
-  l_r = LinearRegression()
-  # 훈련
-  l_r.fit(X_train, y_train)
-  ```
-</details>
-
-<br></br>
-
-### ○ 예측 및 평가  
-MSE: 0.0267, RMSE: 0.1635, R2: 1.0000
-<details>
-  <summary>code</summary>
-
-  ```
-  # 예측
-  prediction = l_r.predict(X_test)
-  # 평가
-  get_evaluation(y_test, prediction)
-  ```
-</details>
-
-<br></br>
-
-### ○ 분석
-✔ LinearRegression을 통한 학습 결과 R2 점수가 1.0로 보이고 있음
-
-✔ 추가적인 전처리 과정을 통해 수치를 조정해보려 함
-
-<br></br>
-<br></br>
-
-## 3. 2Cycle
-### ○ 이상치 제거
-✔ StandardScaler를 통해 데이터 변환 후 이상치 제거
-
-<details>
-  <summary>code</summary>
-
-  ```
-  # 타겟 데이터 이상치 제거
-  from sklearn.preprocessing import StandardScaler
-
-  dro_r_df = enc_r_df.copy()
-
-  # 표준화 객체 생성
-  std = StandardScaler()
-  # 데이터 표준화 변환
-  result = std.fit_transform(dro_r_df)
-  # 표준화 데이터 프레임 생성
-  std_r_df = pd.DataFrame(result, columns=dro_r_df.columns)
-
-  for column in std_r_df.columns:
-      # 타겟 데이터 이상치 제거
-      copy_std_r_df = std_r_df[std_r_df[column].between(-1.96, 1.96)]
-
-  # 이상치 제거후 유지되는 인덱스를 대조하여 원본 데이터 이상치 제거
-  dro_r_df = dro_r_df.iloc[copy_std_r_df.index].reset_index(drop=True)
-  dro_r_df
-  ```
-</details>
-
-<br></br>
-
-### ○ 종속 변수 분포
-✔ 이상치 제거 후 종속 변수 분포 확인
-
-<img src='./images/이상치 제거.png' width='500px'>
-<details>
-  <summary>code</summary>
-
-  ```
-  # 타겟 컬럼 분포 확인
-  dro_r_df.target.hist(color=cmap(np.array([1])), edgecolor='black')
-  ```
-</details>
-
-<br></br>
-
-### ○ 훈련
-
-<img src='./images/1cycle.png' width='200'>
-<details>
-  <summary>code</summary>
-
-  ```
-  import numpy as np
-  from sklearn.linear_model import LinearRegression
-  from sklearn.model_selection import train_test_split
-
-  # 데이터 세트 분리
-  # 피처, 타겟 데이터 분리
-  features, targets = dro_r_df.iloc[:, :-1], dro_r_df.iloc[:, -1]
-
-  # 학습/테스트 및 문제/정답 데이터 세트 분리
-  X_train, X_test, y_train, y_test = \
-  train_test_split(features, targets, test_size=0.2, random_state=124)
-
-  # 선형 회귀 모델
-  l_r = LinearRegression()
-  # 훈련
-  l_r.fit(X_train, y_train)
-  ```
-</details>
-
-
-<br></br>
-
-### ○ 예측 및 평가  
-MSE: 0.0001, RMSE: 0.0076, R2: 1.0000
-<details>
-  <summary>code</summary>
-
-  ```
-  # 예측
-  prediction = l_r.predict(X_test)
-  # 평가
-  get_evaluation(y_test, prediction)
-  ```
-</details>
-
-<br></br>
-
-### ○ 분석
-✔  이상치 제거 후에도 R2 점수가 동일하게 1.0으로 나타남  
-
-✔  이상치 제거 후 종속 변수의 분포가 정규분포 모양에 가까워짐에 따라 이상치를 제거하여 진행
-
-<br></br>
-<br></br>
-
-## 4. 3Cycle
-### ○ 차원축소
-
-<img src='./images/02_탐색/PCA.png' width='800'>
-
-<br>
-
-✔ 차원축소 후 보존율이 약 0.5964으로 나옴에 따라 차원 축소 후에도 데이터 상당 부분이 유지됨을 알 수 있음
-
-✔ 몇몇 데이터가 다른 데이터와 떨어져있지만, 전반적으로 고르게 분포되어 있음
-
-<details>
-  <summary>데이터 분리 code</summary>
-
-  ```
-  import numpy as np
-  from sklearn.linear_model import LinearRegression
-  from sklearn.model_selection import train_test_split
-
-  # 데이터 세트 분리
-  # 피처, 타겟 데이터 분리
-  features, targets = dro_r_df.iloc[:, :-1], dro_r_df.iloc[:, -1]
-
-  # 학습/테스트 및 문제/정답 데이터 세트 분리
-  X_train, X_test, y_train, y_test = \
-  train_test_split(features, targets, test_size=0.2, random_state=124)
-
-  # 학습 및 테스트 데이터로 병합
-  train_df = pd.concat([X_train, y_train], axis=1).reset_index(drop=True)
-  test_df = pd.concat([X_test, y_test], axis=1).reset_index(drop=True)
+  # 타겟 데이터 비중 확인
+  train_target = train_df.target_names.value_counts().reset_index()
+  validation_target = validation_df.target_names.value_counts().reset_index()
+  test_target = test_df.target_names.value_counts().reset_index()
   ```
 </details>
 <details>
-  <summary>차원축소 code</summary>
+  <summary>그래프 code</summary>
 
   ```
-  from sklearn.decomposition import PCA
-
-  # 차원 축소 객체 생성
-  # n_components: 얼마나 차원축소할 건지 작성
-  pca = PCA(n_components=5)
-
-  # 타겟을 제외하고 피처만 차원 축소
-  pca_train = pca.fit_transform(train_df.iloc[:, :-1])
-  pca_test = pca.fit_transform(test_df.iloc[:, :-1])
-
-  # 크기 확인
-  print(pca_train.shape, pca_test.shape)
-  ```
-</details>
-<details>
-  <summary>데이터 프레임 생성 code</summary>
-
-  ```
-  # train
-  # 컬럼명 설정
-  pca_columns = [f'pca{i + 1}' for i in range(pca_train.shape[1])]
-
-  # 차원 축소 데이터 프레임 생성
-  pca_train_df = pd.DataFrame(pca_train, columns=pca_columns)
-  # 타겟 데이터 추가
-  pca_train_df.loc[:, 'target'] = train_df['target']
-
-  # test
-  # 컬럼명 설정
-  pca_columns = [f'pca{i + 1}' for i in range(pca_test.shape[1])]
-
-  # 차원 축소 데이터 프레임 생성
-  pca_test_df = pd.DataFrame(pca_test, columns=pca_columns)
-  # 타겟 데이터 추가
-  pca_test_df.loc[:, 'target'] = test_df['target']
-  ```
-</details>
-<details>
-  <summary>보존율 확인 code</summary>
-
-  ```
-  # 보존율 확인
-  # 각각의 피처가 얼만큼 설명하고 있는지
-  print(pca.explained_variance_ratio_)
-  print(pca.explained_variance_ratio_.sum())
-  ```
-</details>
-
-<br></br>
-
-### ○ 선형 회귀
-
-<img src='./images/선형회귀.png' width='200'>
-<details>
-  <summary>code</summary>
-
-  ```
-  from sklearn.preprocessing import StandardScaler
-  from sklearn.pipeline import Pipeline
-  from sklearn.model_selection import train_test_split
-  from sklearn.linear_model import LinearRegression
-  from sklearn.decomposition import PCA
-
-  # 데이터 세트 분리
-  # 피처, 타겟 데이터 분리
-  features, targets = dro_r_df.iloc[:, :-1], dro_r_df.iloc[:, -1]
-
-  # 학습/테스트 및 문제/정답 데이터 세트 분리
-  X_train, X_test, y_train, y_test = \
-  train_test_split(features, targets, test_size=0.2, random_state=124)
-
-  # 선형 회귀 모델 객체 생성
-  l_r = LinearRegression()
-
-  # 파이프 라인 구축
-  pipe = Pipeline([('pca', PCA(n_components=5)), ('l_r', l_r)])
-
-  # 훈련
-  pipe.fit(X_train, y_train)
-  ```
-</details>
-
-
-<br></br>
-
-### ○ 선형 회귀 - 예측 및 평가  
-MSE: 140353.8722, RMSE: 374.6383, R2: 0.7456
-
-<details>
-  <summary>code</summary>
-
-  ```
-  # 예측
-  prediction = pipe.predict(X_test)
-
-  # 평가
-  get_evaluation(y_test, prediction)
-  ```
-</details>
-
-<br></br>
-
-### ○ 선형 회귀 + StandardScaler
-
-<img src='./images/선형회귀sta.png' width='200'>
-<details>
-  <summary>code</summary>
-
-  ```
-  from sklearn.preprocessing import StandardScaler
-  from sklearn.pipeline import Pipeline
-  from sklearn.model_selection import train_test_split
-  from sklearn.linear_model import LinearRegression
-  from sklearn.decomposition import PCA
-
-  # 데이터 세트 분리
-  # 피처, 타겟 데이터 분리
-  features, targets = dro_r_df.iloc[:, :-1], dro_r_df.iloc[:, -1]
-
-  # 학습/테스트 및 문제/정답 데이터 세트 분리
-  X_train, X_test, y_train, y_test = \
-  train_test_split(features, targets, test_size=0.2, random_state=124)
-
-  # 선형 회귀 모델 객체 생성
-  l_r = LinearRegression()
-
-  # 파이프 라인 구축
-  pipe = Pipeline([('std', StandardScaler()), ('pca', PCA(n_components=5)), ('l_r', l_r)])
-
-  # 훈련
-  pipe.fit(X_train, y_train)
-  ```
-</details>
-
-
-<br></br>
-
-### ○ 선형 회귀 + StandardScaler - 예측 및 평가  
-MSE: 267042.6324, RMSE: 516.7617, R2: 0.5159
-
-<details>
-  <summary>code</summary>
-
-  ```
-  # 예측
-  prediction = pipe.predict(X_test)
-
-  # 평가
-  get_evaluation(y_test, prediction)
-  ```
-</details>
-
-<br></br>
-
-### ○ 다중 회귀
-
-<img src='./images/다중회귀.png' width='200'>
-
-<details>
-  <summary>code</summary>
-
-  ```
-  from sklearn.preprocessing import StandardScaler
-  from sklearn.pipeline import Pipeline
-  from sklearn.model_selection import train_test_split
-  from sklearn.linear_model import LinearRegression
-  from sklearn.decomposition import PCA
-  from sklearn.preprocessing import PolynomialFeatures
-
-  # 데이터 세트 분리
-  # 피처, 타겟 데이터 분리
-  features, targets = dro_r_df.iloc[:, :-1], dro_r_df.iloc[:, -1]
-
-  # 차수 확장
-  poly_features = PolynomialFeatures(degree=2).fit_transform(features)
-
-  # 학습/테스트 및 문제/정답 데이터 세트 분리
-  X_train, X_test, y_train, y_test = \
-  train_test_split(features, targets, test_size=0.2, random_state=124)
-
-  # 선형 회귀 모델 객체 생성
-  l_r = LinearRegression()
-
-  # 파이프 라인 구축
-  pipe = Pipeline([('pca', PCA(n_components=5)), ('l_r', l_r)])
-
-  # 훈련
-  pipe.fit(X_train, y_train)
-  ```
-</details>
-
-
-<br></br>
-
-### ○ 다중 회귀 - 예측 및 평가  
-MSE: 140378.4248, RMSE: 374.6711, R2: 0.7455
-
-<details>
-  <summary>code</summary>
-
-  ```
-  # 예측
-  prediction = pipe.predict(X_test)
-  # 평가
-  get_evaluation(y_test, prediction)
-  ```
-</details>
-
-<br></br>
-
-### ○ 회귀 모델 - 훈련, 예측 및 평가
-DecisionTreeRegressor  
-MSE: 264713.3422, RMSE: 514.5030, R2: 0.5201
-
-<br>
-
-RandomForestRegressor  
-MSE: 131728.1830, RMSE: 362.9438, R2: 0.7612
-
-<br>
-
-GradientBoostingRegressor  
-MSE: 126602.3576, RMSE: 355.8123, R2: 0.7705
-
-<br>
-
-XGBRegressor  
-MSE: 139819.1225, RMSE: 373.9240, R2: 0.7465
-
-<br>
-
-LGBMRegressor  
-MSE: 129706.5225, RMSE: 360.1479, R2: 0.7649
-
-<details>
-  <summary>code</summary>
-
-  ```
-  from sklearn.tree import DecisionTreeRegressor
-  from sklearn.ensemble import RandomForestRegressor
-  from sklearn.ensemble import GradientBoostingRegressor
-  from xgboost import XGBRegressor
-  from lightgbm import LGBMRegressor
-  from sklearn.decomposition import PCA
-  from sklearn.model_selection import train_test_split
-
-  # 데이터 세트 분리
-  # 피처, 타겟 데이터 분리
-  features, targets = dro_r_df.iloc[:, :-1], dro_r_df.iloc[:, -1]
-
-  # 학습/테스트 및 문제/정답 데이터 세트 분리
-  X_train, X_test, y_train, y_test = \
-  train_test_split(features, targets, test_size=0.2, random_state=124)
-
-  # 회귀 모델 담기
-  dt_r = DecisionTreeRegressor(random_state=124)
-  rf_r = RandomForestRegressor(random_state=124, n_estimators=1000)
-  gb_r = GradientBoostingRegressor(random_state=124)
-  xgb_r = XGBRegressor(random_state=124)
-  lgb_r = LGBMRegressor(random_state=124)
-
-  models = [dt_r, rf_r, gb_r, xgb_r, lgb_r]
-
-  # 모델 별 학습 진행:
-  for model in models:
-      # 파이프 라인 구축
-      pipe = Pipeline([('pca', PCA(n_components=5)), (f'{model}', model)])
-      # 모델 학습
-      pipe.fit(X_train, y_train)
-      # 예측
-      prediction = pipe.predict(X_test)
-      # 모델명 출력 (모델명과 평가 결과가 같이 출력되도록)
-      print(model.__class__.__name__)
-      # 평가
-      get_evaluation(y_test, prediction)
-  ```
-</details>
-
-<br></br>
-
-### ○ 분석
-
-<img src='./images/02_탐색/성능비교.png' width='800'>
-
-| model            | model   |
-|:----------------:|:-------:|
-| Linear           | 0.7456  |
-| Linear+std       | 0.5159  |
-| Polynomial       | 0.7455  |
-| DecisionTree     | 0.5201  |
-| RandomForest     | 0.7612  |
-| GradientBoosting | 0.7705  |
-| XGB              | 0.7465  |
-| LGBM             | 0.7649  |
-
-<br></br>
-
-✔ 선형 회귀 모델이 가장 성능이 높고, 다중 회귀 시 오히려 성능이 저하됨에 따라 선형 패턴을 지니고 있다고 판단되나  
-  회귀 모델 분석 시 R2 점수가 0.77로 상승함에 따라 완전한 선형은 아니고 비선형의 패턴도 띄고 있음을 확인함  
-
-✔ StandardScaler 시 오히려 성능이 저하되므로 사용하지 않기로함
-
-✔ 회귀 모델 중 GradientBoostingRegressor을 사용하였을 때, 가장 좋은 성능을 보임에 따라 해당 모델을 선택하는 것이 적합하다고 판단됨
-
-<br></br>
-<br></br>
-
-## 5. 4Cycle
-### ○ GridSearchCV
-
-<img src='./images/grid.png' width='200'>
-
-<details>
-  <summary>code</summary>
-
-  ```
-  from sklearn.model_selection import train_test_split
-  from sklearn.ensemble import GradientBoostingRegressor
-  from sklearn.model_selection import GridSearchCV
-  from sklearn.model_selection import KFold
-  from sklearn.decomposition import PCA
-
-  # 데이터 세트 분리
-  # 피처, 타겟 데이터 분리
-  features, targets = dro_r_df.iloc[:, :-1], dro_r_df.iloc[:, -1]
-
-  # 문제/정답 및 학습/훈련 데이터 분리
-  X_train, X_test, y_train, y_test = \
-  train_test_split(features, targets, test_size=0.2, random_state=124)
-
-  # 검증 데이터 분리
-  val_X_train, val_X_test, val_y_train, val_y_test = \
-  train_test_split(X_train, y_train, test_size=0.2, random_state=124)
-
-  # 가장 성능이 우수한 모델 담기
-  kf_gb_r = GradientBoostingRegressor(random_state=124)
-
-  # 파라미터 값 조정
-  parameters = {'kf_gb_r__max_depth': [6, 7, 8], 'kf_gb_r__min_samples_split': [60, 70, 80], 'kf_gb_r__n_estimators': [60, 70, 80]}
-
-  # 교차검증
-  # n_splits: 데이터를 몇 개의 폴드로 나눌지를 결정 (일반적으로 5 또는 10)
-  # shuffle: 분할 전 데이터 혼합 여부 
-  kfold = KFold(n_splits=5, random_state=124, shuffle=True)
-
-  pipe = Pipeline([('pca', PCA(n_components=5)), ('kf_gb_r', kf_gb_r)])
-
-  # 학습 및 교차 검증 모델 설정
-  grid_kf_gb_r = GridSearchCV(pipe, param_grid=parameters, cv=kfold, n_jobs=-1)
-
-  # 훈련
-  grid_kf_gb_r.fit(X_train, y_train)
-  ```
-</details>
-
-<br></br>
-
-### ○ 최적의 파라미터
-
-| modelmax_depth | min_samples_split | n_estimators |
-|:--------------:|:-----------------:|:------------:|
-| 6              | 80                | 60           |
-
-<details>
-  <summary>code</summary>
-
-  ```
-  # 훈련 결과 확인
-  result_df = pd.DataFrame(grid_kf_gb_r.cv_results_)[['params', 'mean_test_score', 'rank_test_score']]
-  display(result_df)
-  ```
-</details>
-
-<br></br>
-
-### ○ 예측 및 평가  
-MSE: 129113.8568, RMSE: 359.3242, R2: 0.7659
-
-<details>
-  <summary>code</summary>
-
-  ```
-  # 최적의 모델 담기
-  kf_gb_r = grid_kf_gb_r.best_estimator_
-
-  # 예측
-  prediction = kf_gb_r.predict(X_test)
-  # 평가
-  get_evaluation(y_test, prediction)
-  ```
-</details>
-
-<br></br>
-
-### ○ 분석
-✔ 최적의 하이퍼파라미터 값을 찾아 훈련한 결과 성능이 향상된 것을 확인함
-
-<br></br>
-
-### ○ cross val score
-[0.80879301, 0.7774111 , 0.79371269, 0.74300814, 0.7702855 ]
-
-<details>
-  <summary>code</summary>
-
-  ```
-  from sklearn.model_selection import cross_val_score
-
-  # 점수 확인
-  score = cross_val_score(kf_gb_r, features, targets)
-  score
-  ```
-</details>
-
-<br></br>
-
-### ○ 과적합 확인
-<img src='./images/성능평가.png' width='800'>
-
-<br>
-
-train  
-MSE: 67414.6030, RMSE: 259.6432, R2: 0.8795  
-
-<br>
-
-validation  
-MSE: 65419.9304, RMSE: 255.7732, R2: 0.8830  
-
-<br>
-
-test  
-MSE: 129113.8568, RMSE: 359.3242, R2: 0.7659  
-
-
-<details>
-  <summary>code</summary>
-
-  ```
-  import matplotlib.pyplot as plt
-
-  fig, ax = plt.subplots(1, 3, figsize=(14, 5))
-
-  # 예측
-  prediction = kf_gb_r.predict(X_train)
-  # 평가
-  get_evaluation(y_train, prediction)
-
-  ax[0].scatter(y_train, prediction, edgecolors='red', c='orange', alpha=0.2)
-  ax[0].plot([y_train.min(), y_train.max()], [y_train.min(), y_train.max()], 'k--')
-  ax[0].set_title('train')
-
-  # 예측
-  prediction = kf_gb_r.predict(val_X_train)
-  # 평가
-  get_evaluation(val_y_train, prediction)
-
-  ax[1].scatter(val_y_train, prediction, edgecolors='red', c='orange', alpha=0.2)
-  ax[1].plot([val_y_train.min(), val_y_train.max()], [val_y_train.min(), val_y_train.max()], 'k--')
-  ax[1].set_title('Validation')
-
-  # 예측
-  prediction = kf_gb_r.predict(X_test)
-  # 평가
-  get_evaluation(y_test, prediction)
-
-  ax[2].scatter(y_test, prediction, edgecolors='red', c='orange', alpha=0.2)
-  ax[2].plot([y_test.min(), y_test.max()], [y_test.min(), y_test.max()], 'k--')
-  ax[2].set_title('test')
-
+  # 타겟 데이터 비중 변경 전/후 차이 그래프 확인
+  fig, axes = plt.subplots(1, 3, figsize=(12,5))
+
+  # 부채꼴 스타일
+  wedgeprops = {'width': 0.7, 'edgecolor': 'w', 'linewidth': 1}
+
+  # 컬러맵 가져오기
+  cmap = plt.get_cmap('Pastel1')
+  # 컬러맵의 색상 선택
+  outer_colors = cmap(np.array([0, 1, 2, 3, 4, 5, 6]))
+
+  train_counts = train_target['count']
+  train_labels = train_target['target_names']
+  val_counts = validation_target['count']
+  val_labels = validation_target['target_names']
+  test_counts = test_target['count']
+  test_labels = test_target['target_names']
+
+  # 그래프 그리기
+  axes[0].pie(train_counts, labels=train_labels, colors=outer_colors, autopct='%1.1f%%', startangle=90, wedgeprops=wedgeprops)
+  axes[0].set_title('train')
+  axes[1].pie(val_counts, labels=val_labels, colors=outer_colors, autopct='%1.1f%%', startangle=90, wedgeprops=wedgeprops)
+  axes[1].set_title('validation')
+  axes[2].pie(test_counts, labels=test_labels, colors=outer_colors, autopct='%1.1f%%', startangle=90, wedgeprops=wedgeprops)
+  axes[2].set_title('test')
+
+  plt.tight_layout()
   plt.show()
   ```
 </details>
 
 <br></br>
 
-### ○ 분석
-✔ 훈련 데이터 보다 테스트 데이터의 성능이 더 저하됨에 따라 과적합이 발생했다고 판단함
-
-✔ 파라미터 조정을 통해 과적합을 해소하고자 함
-
-<br></br>
-<br></br>
-
-## 6. 5Cycle
-### ○ 파라미터 조정 - 과적합 해소
-
-<img src='./images/과적합해소.png' width='200'>
+### ○ class 및 def 선언
 
 <details>
-  <summary>code</summary>
+  <summary>데이터세트 생성 class 정의 code</summary>
 
   ```
-  from sklearn.model_selection import train_test_split
-  from sklearn.ensemble import GradientBoostingRegressor
-  from sklearn.model_selection import GridSearchCV
-  from sklearn.model_selection import KFold
-  from sklearn.decomposition import PCA
+  import numpy as np
+  from tensorflow.keras.utils import Sequence
+  from sklearn.utils import shuffle
+  import cv2
 
-  # 데이터 세트 분리
-  # 피처, 타겟 데이터 분리
-  features, targets = dro_r_df.iloc[:, :-1], dro_r_df.iloc[:, -1]
+  # 데이터 세트 생성 class 정의
+  class Dataset(Sequence):
+      # 클래스의 초기화
+      # 경로, 타겟, 배치 크기, albumentations 객체, 전처리 하마, 셔플 여부를 인자로 받음
+      def __init__(self, file_paths, targets, batch_size=BATCH_SIZE, aug=None, preprocess=None, shuffle=False):
+          self.file_paths = file_paths
+          self.targets = targets
+          self.batch_size = batch_size
+          self.aug = aug
+          self.preprocess = preprocess
+          self.shuffle = shuffle
 
-  # 문제/정답 및 학습/훈련 데이터 분리
-  X_train, X_test, y_train, y_test = \
-  train_test_split(features, targets, test_size=0.2, random_state=124)
+          # shuffle True 시 진행:
+          if self.shuffle:
+              # epoch 끝날 때마다 호출
+              self.on_epoch_end()
 
-  # 검증 데이터 분리
-  val_X_train, val_X_test, val_y_train, val_y_test = \
-  train_test_split(X_train, y_train, test_size=0.2, random_state=124)
+      # 전체 데이터 세트 크기 반환
+      def __len__(self):
+          # 하나의 배치 사이즈에 필요한 데이터 개수 리턴
+          return int(np.ceil(len(self.targets) / self.batch_size))
 
-  # 가장 성능이 우수한 모델 담기
-  kf_gb_r = GradientBoostingRegressor(random_state=124)
+      # 주어진 인덱스에 해당하는 배치 반환
+      def __getitem__(self, index):
+          # 파일 경로와 타겟 데이터를 배치 크기만큼 자르고, 이미지를 불러와 처리한 후 배치로 반환
+          file_paths_batch = self.file_paths[index * self.batch_size: (index + 1) * self.batch_size]
+          targets_batch = self.targets[index * self.batch_size: (index + 1) * self.batch_size]
 
-  # 파라미터 값 조정
-  parameters = {'kf_gb_r__max_depth': [4, 5], 'kf_gb_r__min_samples_split': [69, 70, 71], 'kf_gb_r__n_estimators': [68, 69, 70]}
+          # 데이터 배치 저장
+          results_batch = np.zeros((file_paths_batch.shape[0], IMAGE_SIZE, IMAGE_SIZE, 3))
 
-  # 교차검증
-  # n_splits: 데이터를 몇 개의 폴드로 나눌지를 결정 (일반적으로 5 또는 10)
-  # shuffle: 분할 전 데이터 혼합 여부 
-  kfold = KFold(n_splits=5, random_state=124, shuffle=True)
+          # 데이터 수만큼 반복
+          for i in range(file_paths_batch.shape[0]):
+              # RGB로 색상 형식을 변환하여 이미지 가져오기
+              image = cv2.cvtColor(cv2.imread(file_paths_batch[i]), cv2.COLOR_BGR2RGB)
+              # 이미지 크기 조정
+              image = cv2.resize(image, (IMAGE_SIZE, IMAGE_SIZE))
 
-  pipe = Pipeline([('pca', PCA(n_components=5)), ('kf_gb_r', kf_gb_r)])
+              # albumentations이 있다면:
+              if self.aug is not None:
+                  # Augmentor 객체로 이미지 변환
+                  image = self.aug(image=image)['image']
 
-  # 학습 및 교차 검증 모델 설정
-  grid_kf_gb_r = GridSearchCV(pipe, param_grid=parameters, cv=kfold, n_jobs=-1)
+              # 전처리 함수가 있다면:
+              if self.preprocess is not None:
+                  # 이미지 전처리 진행
+                  image = self.preprocess(image)
 
-  # 훈련
-  grid_kf_gb_r.fit(X_train, y_train)
+              # 결과 배치에 이미지를 저장
+              results_batch[i] = image
+
+          # 결과 배치와 타겟 배치를 반환
+          return results_batch, targets_batch
+          
+      def on_epoch_end(self):
+          # shuffle 옵션이 켜져있다면, 데이터를 섞기
+          if self.shuffle:
+              # epoch 끝날 때마다 데이터 섞기
+              self.file_paths, self.targets = shuffle(self.file_paths, self.targets)
   ```
 </details>
-
-<br></br>
-
-### ○ 최적의 파라미터
-
-| modelmax_depth | min_samples_split | n_estimators |
-|:--------------:|:-----------------:|:------------:|
-| 4              | 71                | 70           |
-
 <details>
-  <summary>code</summary>
+  <summary>데이터 세트 함수 code</summary>
 
   ```
-  # 훈련 결과 확인
-  result_df = pd.DataFrame(grid_kf_gb_r.cv_results_)[['params', 'mean_test_score', 'rank_test_score']]
-  display(result_df)
+  def create_dataset(paths, targets, BATCH_SIZE, shuffle=True):   
+      return Dataset(paths,
+                    targets,
+                    batch_size=BATCH_SIZE,
+                    shuffle=True)
   ```
 </details>
-
-<br></br>
-
-### ○ 예측 및 평가  
-MSE: 126075.4075, RMSE: 355.0710, R2: 0.7714
-
 <details>
-  <summary>code</summary>
+  <summary>이미지 출력 함수 code</summary>
 
   ```
-  # 최적의 모델 담기
-  kf_gb_r = grid_kf_gb_r.best_estimator_
-
-  # 예측
-  prediction = kf_gb_r.predict(X_test)
-  # 평가
-  get_evaluation(y_test, prediction)
+  # 이미지 출력 함수 선언
+  def show_image(image):
+      plt.figure(figsize=(3, 3))
+      plt.imshow(image)
+      plt.axis('off')
   ```
 </details>
-
-<br></br>
-
-### ○ cross val score
-[0.80198148, 0.7827625 , 0.79563508, 0.74960281, 0.77784566]
-
 <details>
-  <summary>code</summary>
-
-  ```
-  from sklearn.model_selection import cross_val_score
-
-  # 점수 확인
-  score = cross_val_score(kf_gb_r, features, targets)
-  score
-  ```
-</details>
-
-<br></br>
-
-### ○ 과적합 확인
-<img src='./images/성능평가2.png' width='800'>
-
-<br>
-
-train  
-MSE: 86694.7603, RMSE: 294.4397, R2: 0.8450
-
-<br>
-
-validation  
-MSE: 83796.1877, RMSE: 289.4757, R2: 0.8501  
-
-<br>
-
-test  
-MSE: 126075.4075, RMSE: 355.0710, R2: 0.7714  
-
-
-<details>
-  <summary>code</summary>
+  <summary>이미지(다중) 출력 함수 code</summary>
 
   ```
   import matplotlib.pyplot as plt
 
-  fig, ax = plt.subplots(1, 3, figsize=(14, 5))
+  def show_images(files_batch, ncols=4, title=None):    
+      figure, axs = plt.subplots(figsize=(22, 4), nrows=1, ncols=ncols)
+      
+      for i in range(ncols):
+          # files_batch는 float이므로 int로 변경
+          axs[i].imshow(np.array(files_batch[i], dtype='int32'))
+          axs[i].axis('off')
+          axs[i].set_title(title[i]) 
+  ```
+</details>
+<details>
+  <summary>예측 code</summary>
 
-  # 예측
-  prediction = kf_gb_r.predict(X_train)
-  # 평가
-  get_evaluation(y_train, prediction)
+  ```
+  import numpy as np
+  from tensorflow.keras.preprocessing.image import img_to_array
+  import matplotlib.pyplot as plt
 
-  ax[0].scatter(y_train, prediction, edgecolors='red', c='orange', alpha=0.2)
-  ax[0].plot([y_train.min(), y_train.max()], [y_train.min(), y_train.max()], 'k--')
-  ax[0].set_title('train')
+  from tensorflow.keras.applications.vgg16 import VGG16, decode_predictions as vgg16_decode_predictions
+  from tensorflow.keras.applications.resnet_v2 import ResNet50V2, decode_predictions as resnet50v2_decode_predictions
+  from tensorflow.keras.applications.xception import Xception, decode_predictions as xception_decode_predictions
+  from tensorflow.keras.applications.mobilenet_v2 import MobileNetV2, decode_predictions as mobilenetv2_decode_predictions
 
-  # 예측
-  prediction = kf_gb_r.predict(val_X_train)
-  # 평가
-  get_evaluation(val_y_train, prediction)
+  def predict_and_display(images, titles, model_name):
+      figure, axs = plt.subplots(figsize=(22, 4), nrows=1, ncols=len(images))
 
-  ax[1].scatter(val_y_train, prediction, edgecolors='red', c='orange', alpha=0.2)
-  ax[1].plot([val_y_train.min(), val_y_train.max()], [val_y_train.min(), val_y_train.max()], 'k--')
-  ax[1].set_title('Validation')
+      # VGG16 모델 선택
+      if model_name == 'vgg16':
+          model = VGG16()
+          decode_predictions = vgg16_decode_predictions
+          target_size = (224, 224)
+      # ResNet50V2 모델 선택
+      elif model_name == 'resnet50': # ResNet50, 74.9% ; ResNet50V2, 76.0%
+          model = ResNet50V2()
+          decode_predictions = resnet50v2_decode_predictions
+          target_size = (224, 224)
+      # Xception 모델 선택
+      elif model_name == 'xception': # Inception을 기초로 한 모델
+          model = Xception()
+          decode_predictions = xception_decode_predictions
+          target_size = (299, 299)
+      # MobileNetV2 모델 선택
+      elif model_name == 'mobilenet':
+          model = MobileNetV2()
+          decode_predictions = mobilenetv2_decode_predictions
+          target_size = (224, 224)
 
-  # 예측
-  prediction = kf_gb_r.predict(X_test)
-  # 평가
-  get_evaluation(y_test, prediction)
+      for i, image in enumerate(images):
+          # 모델 입력 크기에 맞게 이미지 크기 조정
+          resized_image = cv2.resize(image, target_size)
+          # 이미지 배열로 변환
+          image_array = img_to_array(resized_image)
+          # 차원 확장 (배열의 첫 번째 차원 확장)
+          image_array = np.expand_dims(image_array, axis=0)
+          # 이미지 예측
+          prediction = model.predict(image_array)
+          # 이미지 분류 모델의 예측 결과를 해석
+          target = decode_predictions(prediction)
+          # 높은 확률로 예측 된 클래스 이름과 확률
+          predicted_class = target[0][0][1]
+          predicted_probability = np.round(target[0][0][2] * 100, 2)
+          
+          # 이미지와 예측 결과 표시
+          axs[i].imshow(image.astype('int'))
+          axs[i].axis('off')
+          axs[i].set_title(f"{predicted_class}\n{predicted_probability}%")
 
-  ax[2].scatter(y_test, prediction, edgecolors='red', c='orange', alpha=0.2)
-  ax[2].plot([y_test.min(), y_test.max()], [y_test.min(), y_test.max()], 'k--')
-  ax[2].set_title('test')
+          print(target)
+  ```
+</details>
+<details>
+  <summary>모델 생성 함수 code</summary>
 
-  plt.show()
+  ```
+  from tensorflow.keras.models import Model
+  from tensorflow.keras.layers import Input, Dense , Conv2D , Dropout , Flatten , Activation, MaxPooling2D , GlobalAveragePooling2D
+  from tensorflow.keras.layers import BatchNormalization
+
+  from tensorflow.keras.applications import VGG16
+  from tensorflow.keras.applications import ResNet50V2
+  from tensorflow.keras.applications import Xception
+  from tensorflow.keras.applications import MobileNetV2 # 작은 장치에서도 성능을 끌어올릴 수 있는 모델
+
+  # 모델 생성 함수 선언
+  # model_name: 사전 훈련 모델 이름, verbose: 모델 요약 출력 여부
+  def create_model(model_name='vgg16', verbose=False):
+      # Input layer: 이미지 크기와 채널 수를 지정
+      input_tensor = Input(shape=(IMAGE_SIZE, IMAGE_SIZE, 3))
+      # VGG16 모델 선택
+      if model_name == 'vgg16':
+          model = VGG16(input_tensor=input_tensor, include_top=False, weights='imagenet')
+      # ResNet50V2 모델 선택
+      elif model_name == 'resnet50': # ResNet50, 74.9% ; ResNet50V2, 76.0%
+          model = ResNet50V2(input_tensor=input_tensor, include_top=False, weights='imagenet')
+      # Xception 모델 선택
+      elif model_name == 'xception': # Inception을 기초로 한 모델
+          model = Xception(input_tensor=input_tensor, include_top=False, weights='imagenet')
+      # MobileNetV2 모델 선택
+      elif model_name == 'mobilenet':
+          model = MobileNetV2(input_tensor=input_tensor, include_top=False, weights='imagenet')
+
+      # output layer: 모델 출력 층 
+      x = model.output
+
+      # 분류기
+      # GlobalAveragePooling2D: 글로벌 평균 풀링 층을 추가하여 특성 맵의 공간 차원 축소
+      x = GlobalAveragePooling2D()(x)
+      # hidden layer: VGG16 모델 선택을 선택하지 않았다면 dropout 미진행
+      if model_name != 'vgg16':
+          x = Dropout(rate=0.5)(x)
+
+      # hidden layer: 50개의 뉴런과 ReLU 활성화 함수 사용
+      x = Dense(50, activation='relu')(x)
+
+      # hidden layer: VGG16 모델 선택을 선택하지 않았다면 dropout 미진행
+      if model_name != 'vgg16':
+          x = Dropout(rate=0.5)(x)
+
+      # output layer: 12개의 뉴런과 활성화 함수를 사용하여 클래스 확률 출력
+      output = Dense(12, activation='softmax', name='output')(x)
+
+      # 모델 생성: 입력과 출력을 지정하여 모델 정의
+      model = Model(inputs=input_tensor, outputs=output)
+
+      # verbose가 True인 경우 모델 요약 출력
+      if verbose:
+          model.summary()
+      
+      return model
   ```
 </details>
 
 <br></br>
 
+### ○ 유사도 예측
+✔ 정답
+
+<img src='./images/02_탐색/정답.png' width='800'>
+
+<details>
+  <summary>데이터 전처리 및 데이터세트 생성 code</summary>
+
+  ```
+  import albumentations as A
+
+  # 이미지 사이즈 및 배치 사이즈
+  IMAGE_SIZE = 244
+  BATCH_SIZE = 244
+
+  # 각 클래스에서 하나씩 이미지를 샘플링하여 균등한 배치 구성
+  sampled_df = test_df.groupby('targets', group_keys=False).apply(lambda x: x.sample(1))
+
+  # 데이터 경로 및 타겟 담기 (get_dummies를 통해 원-핫 인코딩 진행)
+  sampled_file_paths = sampled_df['file_paths'].values
+  sampled_targets = pd.get_dummies(sampled_df['targets']).values # CategoricalCrossEntropy
+
+  # 이미지 변환 (증강)
+  aug = A.Compose([
+      # 크기 조정 및 회전
+      A.ShiftScaleRotate(p=0.5),
+      # 좌우 반전
+      A.HorizontalFlip(p=0.5),
+      # 밝기 및 대비 변경
+      A.RandomBrightnessContrast(brightness_limit=0.2, contrast_limit=0, p=0.5)
+  ])
+
+  dataset = create_dataset(sampled_file_paths, sampled_targets, BATCH_SIZE, shuffle=True)
+  ```
+</details>
+<details>
+  <summary>이미지 호출 code</summary>
+
+  ```
+  # datasets 객체에서 배치 이미지를 불러온 후 각 변수에 저장
+  # iter: 반복 가능한 객체를 이터레이터(값을 순차적으로 반환하는 객체)로 변환
+  # next: 이터레이터 객체에서 값을 하나씩 가져오고 가져올 값이 없다면 StopIteration 예외 발생 
+  files_batch, targets_batch = next(iter(dataset))
+  # 레이블 인코딩시, target 차원을 2차원으로 맞춰줘야 한다.
+  print(files_batch.shape, targets_batch.shape)
+  ```
+</details>
+<details>
+  <summary>정답 출력 code</summary>
+
+  ```
+  # 이미지 제목 생성
+  titles = [target_name[np.argmax(target)] for target in targets_batch]
+
+  # 정답 출력
+  show_images(files_batch, ncols=12, title=titles)
+  ```
+</details>
+
+<br>
+
+✔ vgg16
+
+<img src='./images/02_탐색/vgg.png' width='800'>
+
+<br>
+
+✔ resnet50
+
+<img src='./images/02_탐색/resnet50.png' width='800'>
+
+<br>
+
+✔ xception
+
+<img src='./images/02_탐색/xception.png' width='800'>
+<br>
+
+✔ mobilenet
+
+<img src='./images/02_탐색/mobilenet.png' width='800'>
+
+<br></br>
+
 ### ○ 분석
-✔ 파라미터 조정 결과 테스트 데이터의 성능은 상향되고 훈련 데이터의 성능이 많이 저하된 것으로 보아 어느정도 과적합이 해소됐다고 판단함
+✔ vgg16 유사도 예측에서 콜리플라워, 양배추, 오이는 유사성이 높지만, 다른 타겟의 유사성은 매우 낮은 것으로 나타남
+
+✔ 다른 모델 모두 유사성이 매우 낮은 것으로 나타남
 
 <br></br>
 <br></br>
@@ -1136,5 +686,389 @@ MSE: 126075.4075, RMSE: 355.0710, R2: 0.7714
 <br></br>
 <br></br>
 
-# Ⅳ 결론
-✔ 과적합이 해소되고 성능이 가장 우세한 것으로 나타나는 5Cycle 모델을 채택함
+# Ⅲ. 딥러닝
+## 1. 1cycle
+### ○ 훈련 준비
+✔ 대용량 데이터 세트이기 때문에 이미지 사이즈를 150, 배치 사이즈를 64로 조정
+
+✔ 높은 정확성과 효율을 보이는 renset50 모델을 채택
+
+<br>
+
+<details>
+  <summary>이미지 및 배치 사이즈 code</summary>
+
+  ```
+  # 이미지 사이즈 및 배치 사이즈
+  IMAGE_SIZE = 150
+  BATCH_SIZE = 64
+  ```
+</details>
+<details>
+  <summary>전처리 code</summary>
+
+  ```
+  import albumentations as A
+
+  # 데이터 경로 및 타겟 담기
+  train_file_paths = train_df['file_paths'].values
+  train_targets = pd.get_dummies(train_df['targets']).values # CategoricalCrossEntropy
+
+  validation_file_paths = validation_df['file_paths'].values
+  validation_targets = pd.get_dummies(validation_df['targets']).values # CategoricalCrossEntropy
+
+  test_file_paths = test_df['file_paths'].values
+  test_targets = pd.get_dummies(test_df['targets']).values # CategoricalCrossEntropy
+
+  # 이미지 변환 (증강)
+  aug = A.Compose([
+      # 크기 조정 및 회전
+      A.ShiftScaleRotate(p=0.5),
+      # 좌우 반전
+      A.HorizontalFlip(p=0.5),
+      # 밝기 및 대비 변경
+      A.RandomBrightnessContrast(brightness_limit=0.2, contrast_limit=0, p=0.5)
+  ])
+  ```
+</details>
+<details>
+  <summary>데이터세트 생성 code</summary>
+
+  ```
+  # Dataset class로 객체 생성
+  train_dataset = create_dataset(train_file_paths, train_targets, BATCH_SIZE, 'resnet50', shuffle=True)
+  validation_dataset = create_dataset(validation_file_paths, validation_targets, BATCH_SIZE, 'resnet50', shuffle=False)
+  test_dataset = create_dataset(test_file_paths, test_targets, BATCH_SIZE, 'resnet50', shuffle=False)
+  ```
+</details>
+<details>
+  <summary>옵션 조정 code</summary>
+
+  ```
+  from tensorflow.keras.callbacks import ModelCheckpoint, ReduceLROnPlateau, EarlyStopping
+
+  # weights 저장
+  mcp_cb = ModelCheckpoint(
+      filepath="./callback_files/2cycle/weights.{epoch:03d}-{val_loss:.4f}-{acc:.4f}.weights.h5",
+      monitor='val_loss',
+      save_best_only=False,
+      save_weights_only=True,
+      mode='min'
+  )
+
+  # 일정 기간 동안 성능이 개선되지 않을 시 학습률 동적으로 감소
+  rlr_cb = ReduceLROnPlateau(
+      monitor='val_loss',
+      factor=0.1,
+      patience=2,
+      mode='min'
+  )
+
+  # 일정 기간 동안 성능이 개선되지 않을 시 학습 조기 중단
+  ely_cb = EarlyStopping(
+      monitor='val_loss',
+      patience=4,
+      mode='min'
+  )
+  ```
+</details>
+<details>
+  <summary>모델 생성 및 학습 프로세스 설정 code</summary>
+
+  ```
+  from tensorflow.keras.losses import SparseCategoricalCrossentropy, CategoricalCrossentropy, BinaryCrossentropy
+  from tensorflow.keras.optimizers import Adam
+  from tensorflow.keras.metrics import Accuracy
+
+  # 모델 생성 함수를 사용하여 모델 생성
+  model = create_model(model_name='resnet50', verbose=True)
+
+  # 모델 컴파일: 학습 프로세스 설정
+  # optimizer: 최적화 알고리즘, loss: 손실함수, metrics: 성능지표
+  model.compile(optimizer=Adam(), loss=CategoricalCrossentropy(), metrics=['acc'])
+  ```
+</details>
+<details>
+  <summary>메모리 관리 code</summary>
+
+  ```
+  import gc 
+
+  gc.collect()
+  ```
+</details>
+
+<br></br>
+
+### ○ 훈련
+✔ 총 9,105초 소요
+
+✔ 50번의 에포크 중 19번째 에포크에서 EarlyStopping 작동
+
+
+
+<img src='./images/1cycle.png' width='800'>
+
+<details>
+  <summary>code</summary>
+
+  ```
+  # 반복횟수 지정
+  # 대문자로 상수를 표기하면 다른 부분에서 변경되지 않는다는 것을 의미
+  N_EPOCHS = 50
+
+  # 훈련
+  history = model.fit(train_dataset,
+                      batch_size=BATCH_SIZE,
+                      epochs=N_EPOCHS, 
+                      validation_data=validation_dataset,
+                      callbacks=[mcp_cb, rlr_cb, ely_cb])
+  ```
+</details>
+
+<br></br>
+
+### ○ 평가
+✔ acc: 0.9979, loss: 0.0052
+
+<img src='./images/03_딥러닝/resnet.png' width='400'>
+
+<details>
+  <summary>평가 code</summary>
+
+  ```
+  # 평가
+  model.evaluate(test_dataset, batch_size=BATCH_SIZE)
+  ```
+</details>
+<details>
+  <summary>그래프 code</summary>
+
+  ```
+  import numpy as np
+  import matplotlib.pyplot as plt
+
+  # 학습과정 지표를 그래프화
+  def show_history(history):
+      plt.figure(figsize=(6, 6))
+      plt.yticks(np.arange(0, 1, 0.05))
+      plt.plot(history.history['acc'], label='train')
+      plt.plot(history.history['val_acc'], label='validation')
+      plt.legend()
+      
+  show_history(history)
+  ```
+</details>
+
+<br></br>
+<br></br>
+
+## 2. 2cycle
+### ○ 훈련 준비
+✔ 타 모델을 사용하여 성능을 확인
+
+✔ 경량성과 효율성이 뛰어난 mobilenet 모델 채택
+
+<br>
+
+<details>
+  <summary>이미지 및 배치 사이즈 code</summary>
+
+  ```
+  # 이미지 사이즈 및 배치 사이즈
+  IMAGE_SIZE = 150
+  BATCH_SIZE = 64
+  ```
+</details>
+<details>
+  <summary>전처리 code</summary>
+
+  ```
+  import albumentations as A
+
+  # 데이터 경로 및 타겟 담기
+  train_file_paths = train_df['file_paths'].values
+  train_targets = pd.get_dummies(train_df['targets']).values # CategoricalCrossEntropy
+
+  validation_file_paths = validation_df['file_paths'].values
+  validation_targets = pd.get_dummies(validation_df['targets']).values # CategoricalCrossEntropy
+
+  test_file_paths = test_df['file_paths'].values
+  test_targets = pd.get_dummies(test_df['targets']).values # CategoricalCrossEntropy
+
+  # 이미지 변환 (증강)
+  aug = A.Compose([
+      # 크기 조정 및 회전
+      A.ShiftScaleRotate(p=0.5),
+      # 좌우 반전
+      A.HorizontalFlip(p=0.5),
+      # 밝기 및 대비 변경
+      A.RandomBrightnessContrast(brightness_limit=0.2, contrast_limit=0, p=0.5)
+  ])
+  ```
+</details>
+<details>
+  <summary>데이터세트 생성 code</summary>
+
+  ```
+  # Dataset class로 객체 생성
+  train_dataset = create_dataset(train_file_paths, train_targets, BATCH_SIZE, 'mobilenet', shuffle=True)
+  validation_dataset = create_dataset(validation_file_paths, validation_targets, BATCH_SIZE, 'mobilenet', shuffle=False)
+  test_dataset = create_dataset(test_file_paths, test_targets, BATCH_SIZE, 'mobilenet', shuffle=False)
+  ```
+</details>
+<details>
+  <summary>옵션 조정 code</summary>
+
+  ```
+  from tensorflow.keras.callbacks import ModelCheckpoint, ReduceLROnPlateau, EarlyStopping
+
+  # weights 저장
+  mcp_cb = ModelCheckpoint(
+      filepath="./callback_files/1cycle/weights.{epoch:03d}-{val_loss:.4f}-{acc:.4f}.weights.h5",
+      monitor='val_loss',
+      save_best_only=False,
+      save_weights_only=True,
+      mode='min'
+  )
+
+  # 일정 기간 동안 성능이 개선되지 않을 시 학습률 동적으로 감소
+  rlr_cb = ReduceLROnPlateau(
+      monitor='val_loss',
+      factor=0.1,
+      patience=2,
+      mode='min'
+  )
+
+  # 일정 기간 동안 성능이 개선되지 않을 시 학습 조기 중단
+  ely_cb = EarlyStopping(
+      monitor='val_loss',
+      patience=4,
+      mode='min'
+  )
+  ```
+</details>
+<details>
+  <summary>모델 생성 및 학습 프로세스 설정 code</summary>
+
+  ```
+  from tensorflow.keras.losses import SparseCategoricalCrossentropy, CategoricalCrossentropy, BinaryCrossentropy
+  from tensorflow.keras.optimizers import Adam
+  from tensorflow.keras.metrics import Accuracy
+
+  # 모델 생성 함수를 사용하여 모델 생성
+  model = create_model(model_name='mobilenet', verbose=True)
+
+  # 모델 컴파일: 학습 프로세스 설정
+  # optimizer: 최적화 알고리즘, loss: 손실함수, metrics: 성능지표
+  model.compile(optimizer=Adam(), loss=CategoricalCrossentropy(), metrics=['acc'])
+  ```
+</details>
+<details>
+  <summary>메모리 관리 code</summary>
+
+  ```
+  import gc 
+
+  gc.collect()
+  ```
+</details>
+
+<br></br>
+
+### ○ 훈련
+✔ 총 10,146초 소요
+
+✔ 50번의 에포크 중 43번째 에포크에서 EarlyStopping 작동
+
+
+
+<img src='./images/2cycle.png' width='800'>
+
+<details>
+  <summary>code</summary>
+
+  ```
+  # 반복횟수 지정
+  # 대문자로 상수를 표기하면 다른 부분에서 변경되지 않는다는 것을 의미
+  N_EPOCHS = 50
+
+  # 훈련
+  history = model.fit(train_dataset,
+                      batch_size=BATCH_SIZE,
+                      epochs=N_EPOCHS, 
+                      validation_data=validation_dataset,
+                      callbacks=[mcp_cb, rlr_cb, ely_cb])
+  ```
+</details>
+
+<br></br>
+
+### ○ 평가
+✔ acc: 0.9986, loss: 0.0080
+
+<img src='./images/03_딥러닝/mo.png' width='400'>
+
+<details>
+  <summary>평가 code</summary>
+
+  ```
+  # 평가
+  model.evaluate(test_dataset, batch_size=BATCH_SIZE)
+  ```
+</details>
+<details>
+  <summary>그래프 code</summary>
+
+  ```
+  import numpy as np
+  import matplotlib.pyplot as plt
+
+  # 학습과정 지표를 그래프화
+  def show_history(history):
+      plt.figure(figsize=(6, 6))
+      plt.yticks(np.arange(0, 1, 0.05))
+      plt.plot(history.history['acc'], label='train')
+      plt.plot(history.history['val_acc'], label='validation')
+      plt.legend()
+      
+  show_history(history)
+  ```
+</details>
+
+<br></br>
+<br></br>
+<br></br>
+<br></br>
+<br></br>
+
+# Ⅳ. 결론
+## 1. 모델 평가
+
+<img src='./images/03_딥러닝/모델 성능비교.png' width='800'>
+
+<br>
+
+✔ 모델 성능 비교 결과 정확도가 더 우세한 mobilenet 모델을 채택
+
+<br></br>
+<br></br>
+
+## 2. 예측
+
+<img src='./images/result_bean.png' width='800px'>
+<img src='./images/result_brinjal.png' width='800px'>
+<img src='./images/result_broccoli.png' width='800px'>
+<img src='./images/result_cabbage.png' width='800px'>
+<img src='./images/result_capsicum.png' width='800px'>
+<img src='./images/result_carrot.png' width='800px'>
+<img src='./images/result_cauliflower.png' width='800px'>
+<img src='./images/result_cucumber.png' width='800px'>
+<img src='./images/result_potato.png' width='800px'>
+<img src='./images/result_pumpkin.png' width='800px'>
+<img src='./images/result_radish.png' width='800px'>
+<img src='./images/result_tomato.png' width='800px'>
+
+<br>
+
+✔ 예측 결과 정확하게 예측하고 있는 것으로 확인함
