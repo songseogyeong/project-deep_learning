@@ -47,8 +47,9 @@
 
 ## 4. 데이터 수집
 ✔ 데이터 정보  
-Kaggle의 USA Residential Building Energy Consumption Survey 데이터 세트 활용 (CSV 파일)  
+Kaggle의 Vegetable Image Dataset 데이터 세트 활용
 https://www.kaggle.com/datasets/misrakahmed/vegetable-image-dataset
+
 
 <br>
 
@@ -116,19 +117,19 @@ https://www.kaggle.com/datasets/misrakahmed/vegetable-image-dataset
 
 | Bean   | Brinjal | Broccoli |
 |:------:|:-------:|:--------:|
-| <img src='./images/01_개요/Bean51.png' width='100'>  | <img src='./images/01_개요/Brinjal210.png' width='100'>    | <img src='./images/01_개요/Broccoli133.png' width='100'>     |
+| <img src='./images/01_개요/Bean51.png' width='200'>  | <img src='./images/01_개요/Brinjal210.png' width='200'>    | <img src='./images/01_개요/Broccoli133.png' width='200'>     |
 
 | Cabbage   | Capsicum | Carrot |
 |:------:|:-------:|:--------:|
-| <img src='./images/01_개요/Cabbage124.png' width='100'>  | <img src='./images/01_개요/Capsicum77.png' width='100'>    | <img src='./images/01_개요/Carrot514.png' width='100'>     |
+| <img src='./images/01_개요/Cabbage124.png' width='200'>  | <img src='./images/01_개요/Capsicum77.png' width='200'>    | <img src='./images/01_개요/Carrot514.png' width='200'>     |
 
 | Cauliflower   | Cucumber | Potato |
 |:------:|:-------:|:--------:|
-| <img src='./images/01_개요/Cauliflower11.png' width='100'>  | <img src='./images/01_개요/Cucumber163.png' width='100'>    | <img src='./images/01_개요/Potato276.png' width='100'>     |
+| <img src='./images/01_개요/Cauliflower11.png' width='200'>  | <img src='./images/01_개요/Cucumber163.png' width='200'>    | <img src='./images/01_개요/Potato276.png' width='200'>     |
 
 | Pumpkin   | Radish | Tomato |
 |:------:|:-------:|:--------:|
-| <img src='./images/01_개요/Pumpkin85.png' width='100'>  | <img src='./images/01_개요/Radish236.png' width='100'>    | <img src='./images/01_개요/Tomato29.png' width='100'>     |
+| <img src='./images/01_개요/Pumpkin85.png' width='200'>  | <img src='./images/01_개요/Radish236.png' width='200'>    | <img src='./images/01_개요/Tomato29.png' width='200'>     |
 
 <br></br>
 <br></br>
@@ -676,9 +677,9 @@ https://www.kaggle.com/datasets/misrakahmed/vegetable-image-dataset
 <br></br>
 
 ### ○ 분석
-✔ vgg16 유사도 예측에서 콜리플라워, 양배추, 오이는 유사성이 높지만, 다른 타겟의 유사성은 매우 낮은 것으로 나타남
+✔ vgg16, resnet50, xception, mobilenet 모델을 사용하여 유사도 분석 진행
 
-✔ 다른 모델 모두 유사성이 매우 낮은 것으로 나타남
+✔ 유사도 분석 진행 결과 50% 이상 맞추는 모델이 없었으며, 유사도가 낮은 것으로 나타남
 
 <br></br>
 <br></br>
@@ -692,6 +693,9 @@ https://www.kaggle.com/datasets/misrakahmed/vegetable-image-dataset
 ✔ 대용량 데이터 세트이기 때문에 이미지 사이즈를 150, 배치 사이즈를 64로 조정
 
 ✔ 높은 정확성과 효율을 보이는 renset50 모델을 채택
+
+✔ 다양한 상황을 고려하기 위해 이미지를 변환하여 데이터를 증강  
+특히, 이미지 사진 촬영 환경이 다를 수 있기 때문에 밝기 및 대비 변경을 통해 이상을 방지할 수 있게 조정함
 
 <br>
 
@@ -1069,6 +1073,79 @@ https://www.kaggle.com/datasets/misrakahmed/vegetable-image-dataset
 <img src='./images/result_radish.png' width='800px'>
 <img src='./images/result_tomato.png' width='800px'>
 
+<details>
+  <summary>가중치 불러오기 code</summary>
+
+  ```
+  from tensorflow.keras.losses import SparseCategoricalCrossentropy, CategoricalCrossentropy
+  from tensorflow.keras.optimizers import Adam
+  from tensorflow.keras.metrics import Accuracy
+
+  model = create_model(model_name='mobilenet', verbose=True)
+  model.load_weights('./callback_files/1cycle/weights.043-0.0007-0.9982.weights.h5')
+  model.compile(optimizer=Adam(), loss=CategoricalCrossentropy(), metrics=['acc'])
+  ```
+</details>
+<details>
+  <summary>예측 code</summary>
+
+  ```
+  import cv2
+  import numpy as np
+  import matplotlib.pyplot as plt
+  from tensorflow.keras.applications.mobilenet import preprocess_input as mobilenet_preprocess_input
+
+  # 클래스 이름 지정
+  class_names = ['Bean', 'Brinjal', 'Broccoli', 'Cabbage', 'Capsicum', 'Carrot', 'Cauliflower', 'Cucumber', 'Potato', 'Pumpkin', 'Radish', 'Tomato']
+
+  # 선택할 이미지의 시작 인덱스와 끝 인덱스 지정
+  start_index = 10
+  end_index = 18
+
+  # 행과 열의 개수 지정
+  num_rows = (end_index - start_index + 3) // 4  # +3 ensures rounding up
+  num_cols = 4
+
+  # 서브플롯 설정
+  fig, axs = plt.subplots(num_rows, num_cols, figsize=(15, num_rows * 3))
+
+  # 시작부터 끝 인덱스까지의 이미지들을 처리
+  for idx, i in enumerate(range(start_index, end_index)):
+      # 이미지 파일 경로 선택
+      selected_file_path = train_file_paths[i]
+
+      # 이미지 로드 및 전처리
+      image = cv2.cvtColor(cv2.imread(selected_file_path), cv2.COLOR_BGR2RGB)
+      image = cv2.resize(image, (150, 150))
+      processed_image = mobilenet_preprocess_input(image.copy())
+
+      # 모델 예측
+      predicted_probabilities = model.predict(np.expand_dims(processed_image, axis=0))
+
+      # 예측된 클래스 및 확률 출력
+      predicted_class_index = np.argmax(predicted_probabilities)
+      predicted_class_name = class_names[predicted_class_index]
+      predicted_probability = predicted_probabilities[0][predicted_class_index]
+
+      # 실제 클래스 정보 가져오기
+      real_class_index = np.where(train_targets[i])[0][0]  # True 값의 인덱스 가져오기
+      real_class_name = class_names[real_class_index]
+
+      # 서브플롯에 이미지와 텍스트 출력
+      ax = axs[idx // num_cols, idx % num_cols]
+      ax.imshow(image)
+      ax.set_title(f"Real: {real_class_name}\nPred: {predicted_class_name} ({predicted_probability:.4f})")
+      ax.axis('off')
+
+  # 남은 서브플롯을 비활성화
+  for j in range(idx + 1, num_rows * num_cols):
+      axs[j // num_cols, j % num_cols].axis('off')
+
+  plt.tight_layout()
+  plt.show()
+  ```
+</details>
+
 <br>
 
-✔ 예측 결과 정확하게 예측하고 있는 것으로 확인함
+✔ 각 클래스 별로 랜덤한 이미지를 가져와 예측한 결과 정확히 분류되는 것을 확인함
