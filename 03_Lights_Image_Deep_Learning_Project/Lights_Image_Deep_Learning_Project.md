@@ -61,21 +61,25 @@
 <br>
 
 ○ vgg16
+
 <img src='./images/Similarity_vgg.png' width='800px'>
 
 <br>
 
 ○ resnet50
+
 <img src='./images/Similarity_resnet50.png' width='800px'>
 
 <br>
 
 ○ xception
+
 <img src='./images/Similarity_xception.png' width='800px'>
 
 <br>
 
 ○ mobilenet
+
 <img src='./images/Similarity_mobilenet.png' width='800px'>
 
 <br></br>
@@ -203,6 +207,11 @@
 | 3  | vgg16  | 0.9570 | 0.9687   |
 | 4  | xception  | 0.9756 | 1.0000   |
 | 5  | 미세조정  | 0.9966 | 0.9974   |
+
+<br>
+
+미세조정 전: 3240s  
+미세 조정 후: 590s
 
 <br>
 
